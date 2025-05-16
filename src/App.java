@@ -41,7 +41,7 @@ class StartPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         try {
-            backgroundImg = new ImageIcon("./flappybirdbg.png").getImage();
+            backgroundImg = new ImageIcon(getClass().getResource("/BG/flappybirdbg.png")).getImage();
         } catch (Exception e) {
             System.out.println("Background image not found.");
         }
@@ -49,7 +49,7 @@ class StartPanel extends JPanel {
         JLabel title = new JLabel("Flappy Bird");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         title.setFont(new Font("Arial", Font.BOLD, 36));
-        title.setForeground(Color.WHITE);
+        title.setForeground(Color.BLACK);
 
         JButton startButton = new JButton("Start");
         JButton shopButton = new JButton("Shop");
@@ -58,7 +58,7 @@ class StartPanel extends JPanel {
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         shopButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         highScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        highScoreLabel.setForeground(Color.WHITE);
+        highScoreLabel.setForeground(Color.BLACK);
 
         highScore = loadHighScore();
         highScoreLabel.setText("High Score: " + highScore);
