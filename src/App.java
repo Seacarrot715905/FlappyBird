@@ -1,5 +1,3 @@
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -51,21 +49,32 @@ class StartPanel extends JPanel {
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setForeground(Color.BLACK);
 
-        JButton startButton = new JButton("Start");
-        JButton shopButton = new JButton("Shop");
+        String[] difficulties = {"Easy", "Medium", "Hard", "Impossible", "Cooked"};
+
+        JButton startButton = new JButton("       Start        ");
+        JButton shopButton = new JButton("        Shop        ");
+        
+        JComboBox<String> difficultyDrop = new JComboBox<>(difficulties);
         JLabel highScoreLabel = new JLabel();
 
+        
+        difficultyDrop.setPreferredSize(new Dimension(120, 25));
+        difficultyDrop.setMaximumSize(new Dimension(120, 900));
+        difficultyDrop.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         shopButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+       
         highScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         highScoreLabel.setForeground(Color.BLACK);
 
         highScore = loadHighScore();
         highScoreLabel.setText("High Score: " + highScore);
-
+        
         startButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
-            FlappyBird flappyBird = new FlappyBird(frame);
+            String difficulty = (String) (difficultyDrop.getSelectedItem());
+            FlappyBird flappyBird = new FlappyBird(frame, difficulty);
             frame.add(flappyBird);
             frame.revalidate();
             frame.repaint();
@@ -73,6 +82,8 @@ class StartPanel extends JPanel {
         });
 
         shopButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Shop is under construction!"));
+
+        difficultyDrop.setPreferredSize(new Dimension(0, 10));
 
         add(Box.createVerticalGlue());
         add(title);
@@ -82,8 +93,12 @@ class StartPanel extends JPanel {
         add(startButton);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(shopButton);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(difficultyDrop);
         add(Box.createVerticalGlue());
     }
+
+    
 
     @Override
     protected void paintComponent(Graphics g) {

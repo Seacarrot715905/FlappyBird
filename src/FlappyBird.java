@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.swing.*;
 import java.io.*;
 
+
 public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int boardWidth = (int) screenSize.getWidth();
@@ -65,8 +66,33 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     JFrame frame;
 
-    public FlappyBird(JFrame frame) {
+    public FlappyBird(JFrame frame, String difficulty) {
         this.frame = frame;
+        if (difficulty.equals("Easy")) {
+            velocityX = -6;
+            placePipeTimer = new Timer(1500, e -> placePipes());
+            placePipeTimer.start();
+        }
+        else if (difficulty.equals("Medium")) {
+            velocityX = -12;
+            placePipeTimer = new Timer(1500, e -> placePipes());
+            placePipeTimer.start();
+        }
+        if (difficulty.equals("Hard")) {
+            velocityX = -60;
+            placePipeTimer = new Timer(700, e -> placePipes());
+            placePipeTimer.start();
+        }
+        if (difficulty.equals("Impossible")) {
+            velocityX = -120;
+            placePipeTimer = new Timer(150, e -> placePipes());
+            placePipeTimer.start();
+        }
+        if (difficulty.equals("Cooked")) {
+            velocityX = -140;
+            placePipeTimer = new Timer(60, e -> placePipes());
+            placePipeTimer.start();
+        }
 
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setFocusable(true);
@@ -79,9 +105,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
         bird = new Bird(birdImg);
         pipes = new ArrayList<>();
-
-        placePipeTimer = new Timer(1500, e -> placePipes());
-        placePipeTimer.start();
+        
+        
 
         gameLoop = new Timer(1000 / 60, this);
         gameLoop.start();
