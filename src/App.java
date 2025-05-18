@@ -58,6 +58,7 @@ class StartPanel extends JPanel {
         
         JComboBox<String> difficultyDrop = new JComboBox<>(difficulties);
         JLabel highScoreLabel = new JLabel();
+        JLabel coinsLabel = new JLabel();
 
         
         difficultyDrop.setPreferredSize(new Dimension(120, 25));
@@ -70,10 +71,14 @@ class StartPanel extends JPanel {
         highScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         highScoreLabel.setForeground(Color.BLACK);
 
+        coinsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        coinsLabel.setForeground(Color.BLACK);
+
         highScore = loadHighScore();
         coins = loadCoins();
         
-        highScoreLabel.setText("High Score: " + highScore + coins);
+        highScoreLabel.setText("High Score: " + highScore);
+        coinsLabel.setText("Coins: " + coins);
         
         startButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
@@ -93,6 +98,8 @@ class StartPanel extends JPanel {
         add(title);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(highScoreLabel);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(coinsLabel);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(startButton);
         add(Box.createRigidArea(new Dimension(0, 20)));
@@ -156,9 +163,7 @@ class StartPanel extends JPanel {
         }
         
         int newTotal = 0;
-        if(score == 0) {
-            coinsToAdd = -25;
-        }
+        
         try {
             newTotal = new StartPanel(null).loadCoins() + coinsToAdd;
         } catch (Exception e) {

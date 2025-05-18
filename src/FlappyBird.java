@@ -202,7 +202,14 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             velocityY = -9;
+        }
             if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
+                StartPanel.saveHighScore((int) Math.max(score, loadCurrentHighScore()));
+                if(gameOver  && score == 0){
+                    StartPanel.saveTotalCoins((int)(score-25),getDifficulty());
+                }else{
+                    StartPanel.saveTotalCoins((int)(score),getDifficulty());
+                }
                 bird.y = birdY;
                 velocityY = 0;
                 pipes.clear();
@@ -210,7 +217,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
                 score = 0;
                 gameLoop.start();
                 placePipeTimer.start();
-            }
+            
         }
 
         if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
