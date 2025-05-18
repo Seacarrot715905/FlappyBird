@@ -32,7 +32,9 @@ public class App {
 
 class StartPanel extends JPanel {
     private static final String HIGHSCORE_FILE = "highscore.txt";
+    private static final String COINS_FILE = "coins.txt";
     private int highScore = 0;
+    private int coins = 0;
     private Image backgroundImg;
 
     public StartPanel(JFrame frame) {
@@ -69,7 +71,9 @@ class StartPanel extends JPanel {
         highScoreLabel.setForeground(Color.BLACK);
 
         highScore = loadHighScore();
-        highScoreLabel.setText("High Score: " + highScore);
+        coins = loadCoins();
+        
+        highScoreLabel.setText("High Score: " + highScore + coins);
         
         startButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
@@ -115,10 +119,56 @@ class StartPanel extends JPanel {
             return 0;
         }
     }
+    private int loadCoins() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(COINS_FILE))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
 
     public static void saveHighScore(int score) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCORE_FILE))) {
             writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void saveTotalCoins(int score, int difficulty) {
+        int coinsToAdd = 0;
+        switch (difficulty) {
+            case 1: 
+                coinsToAdd = (int)(score * 1);
+                break;
+            case 2: 
+                coinsToAdd = (int)(score * 2); 
+                break;
+            case 3: 
+                coinsToAdd = (int)(score * 2.5); 
+                break;
+            case 4: 
+                coinsToAdd = (int)(score * 4); 
+                break;
+            case 5: 
+                coinsToAdd = (int)(score * 6); 
+                break;
+            default: coinsToAdd = score;
+        }
+        
+        int newTotal = 0;
+        if(score == 0) {
+            coinsToAdd = -25;
+        }
+        try {
+            newTotal = new StartPanel(null).loadCoins() + coinsToAdd;
+        } catch (Exception e) {
+            newTotal = coinsToAdd;
+        }
+        if(newTotal < 0) {
+            newTotal = 0;
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(COINS_FILE))) {
+            writer.write(String.valueOf(newTotal));
         } catch (IOException e) {
             e.printStackTrace();
         }

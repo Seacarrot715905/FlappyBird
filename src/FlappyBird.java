@@ -184,6 +184,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             return 0;
         }
     }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -193,6 +194,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             placePipeTimer.stop();
             gameLoop.stop();
             StartPanel.saveHighScore((int) Math.max(score, loadCurrentHighScore()));
+            StartPanel.saveTotalCoins((int)(score),getDifficulty());
         }
     }
 
@@ -214,6 +216,24 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
             App.showStartScreen(frame);
         }
+    }
+    public int getDifficulty() {
+        if (velocityX == -6) {
+            return 1; // Easy
+        }
+        if (velocityX == -12) {
+            return 2; // Medium
+        }
+        if (velocityX == -60) {
+            return 3; // Hard
+        }
+        if (velocityX == -120) {
+            return 4; // Impossible
+        }
+        if (velocityX == -140) {
+            return 5; // Cooked
+        }
+        return 0; // Default
     }
 
     @Override public void keyTyped(KeyEvent e) {}
