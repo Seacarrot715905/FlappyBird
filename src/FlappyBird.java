@@ -256,12 +256,14 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
                 score = 0;
                 gameLoop.start();
                 placePipeTimer.start();
-            
+            }
         }
 
         if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
             App.showStartScreen(frame);
         }
+        
+
     }
     public int getDifficulty() {
         if (velocityX == -6) {
