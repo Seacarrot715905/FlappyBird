@@ -1,17 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.print.DocFlavor.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
-import java.io.*;
 
 public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -66,6 +63,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     ArrayList<Pipe> pipes;
     Random random = new Random();
 
+    String diff;
     Timer gameLoop;
     Timer placePipeTimer;
     boolean gameOver = false;
@@ -75,6 +73,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     public FlappyBird(JFrame frame, String difficulty) {
         this.frame = frame;
+        diff = difficulty;
         if (difficulty.equals("Easy")) {
             velocityX = -6;
             placePipeTimer = new Timer(1500, e -> placePipes());
@@ -203,8 +202,43 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
                a.y + a.height > b.y;
     }
 
-    private int loadCurrentHighScore() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("highscore.txt"))) {
+    private int loadCurrentHighScoreEasy() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreEasy.txt"))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadCurrentHighScoreMedium() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreMedium.txt"))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadCurrentHighScoreHard() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreHard.txt"))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadCurrentHighScoreImpossible() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreImpossible.txt"))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadCurrentHighScoreCooked() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreCooked.txt"))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadCurrentHighScoreJustWhy() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreJustWhy.txt"))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             return 0;
@@ -219,22 +253,19 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         if (gameOver) {
             placePipeTimer.stop();
             gameLoop.stop();
-            StartPanel.saveHighScore((int) Math.max(score, loadCurrentHighScore()));
+            if (diff.equals("Easy"))
+                StartPanel.saveHighScoreEasy((int) Math.max(score, loadCurrentHighScoreEasy()));
+            if (diff.equals("Medium"))
+                StartPanel.saveHighScoreMedium((int) Math.max(score, loadCurrentHighScoreMedium()));
+            if (diff.equals("Hard"))
+                StartPanel.saveHighScoreHard((int) Math.max(score, loadCurrentHighScoreHard()));
+            if (diff.equals("Impossible"))
+                StartPanel.saveHighScoreImpossible((int) Math.max(score, loadCurrentHighScoreImpossible()));
+            if (diff.equals("Cooked"))
+                StartPanel.saveHighScoreCooked((int) Math.max(score, loadCurrentHighScoreCooked()));
+            if (diff.equals("Just Why"))
+                StartPanel.saveHighScoreJustWhy((int) Math.max(score, loadCurrentHighScoreJustWhy()));
             StartPanel.saveTotalCoins((int)(score),getDifficulty());
-        }
-    }
-
-    private void playJumpSound() {
-        try {
-            java.net.URL soundURL = getClass().getResource("/Sounds/jump.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-20.0f);
-            clip.start();
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
         }
     }
 
@@ -242,44 +273,56 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             velocityY = -9;
-            if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
-                StartPanel.saveHighScore((int) Math.max(score, loadCurrentHighScore()));
-                if(gameOver  && score == 0){
-                    StartPanel.saveTotalCoins((int)(score-25), getDifficulty());
-                }else{
-                    StartPanel.saveTotalCoins((int)(score), getDifficulty());
-                }
-                bird.y = birdY;
-                velocityY = 0;
-                pipes.clear();
-                gameOver = false;
-                score = 0;
-                gameLoop.start();
-                placePipeTimer.start();
+        }
+        if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
+            if (diff.equals("Easy"))
+                StartPanel.saveHighScoreEasy((int) (Math.max(score, loadCurrentHighScoreEasy())));
+            if (diff.equals("Medium"))
+                StartPanel.saveHighScoreMedium((int) (Math.max(score, loadCurrentHighScoreMedium())));
+            if (diff.equals("Hard"))
+                StartPanel.saveHighScoreHard((int) (Math.max(score, loadCurrentHighScoreHard())));
+            if (diff.equals("Impossible"))
+                StartPanel.saveHighScoreImpossible((int) (Math.max(score, loadCurrentHighScoreImpossible())));
+            if (diff.equals("Cooked"))
+                StartPanel.saveHighScoreCooked((int) (Math.max(score, loadCurrentHighScoreCooked())));
+            if (diff.equals("Just Why"))
+                StartPanel.saveHighScoreJustWhy((int) (Math.max(score, loadCurrentHighScoreJustWhy())));
+            if(gameOver  && score == 0){
+                StartPanel.saveTotalCoins((int)(score-25),getDifficulty());
+            }else{
+                StartPanel.saveTotalCoins((int)(score),getDifficulty());
             }
+            bird.y = birdY;
+            velocityY = 0;
+            pipes.clear();
+            gameOver = false;
+            score = 0;
+            gameLoop.start();
+            placePipeTimer.start();
         }
 
         if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
             App.showStartScreen(frame);
         }
-        
-
     }
     public int getDifficulty() {
-        if (velocityX == -6) {
+        if (diff.equals("Easy")) {
             return 1; // Easy
         }
-        if (velocityX == -12) {
+        if (diff.equals("Medium")) {
             return 2; // Medium
         }
-        if (velocityX == -60) {
+        if (diff.equals("Hard")) {
             return 3; // Hard
         }
-        if (velocityX == -120) {
+        if (diff.equals("Impossible")) {
             return 4; // Impossible
         }
-        if (velocityX == -140) {
+        if (diff.equals("Cooked")) {
             return 5; // Cooked
+        }
+        if (diff.equals("Just Why")) {
+            return 6;
         }
         return 0; // Default
     }

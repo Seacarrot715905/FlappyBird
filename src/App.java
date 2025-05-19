@@ -1,6 +1,6 @@
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import javax.swing.*;
 
 public class App {
 
@@ -31,9 +31,19 @@ public class App {
 }
 
 class StartPanel extends JPanel {
-    private static final String HIGHSCORE_FILE = "highscore.txt";
+    private static final String HIGHSCOREEASY_FILE = "highscoreEasy.txt";
+    private static final String HIGHSCOREMEDIUM_FILE = "highscoreMedium.txt";
+    private static final String HIGHSCOREHARD_FILE = "highscoreHard.txt";
+    private static final String HIGHSCORECOOKED_FILE = "highscoreCooked.txt";
+    private static final String HIGHSCOREIMPOSSIBLE_FILE = "highscoreImpossible.txt";
+    private static final String HIGHSCOREJUSTWHY_FILE = "highscoreJustWhy.txt";
     private static final String COINS_FILE = "coins.txt";
-    private int highScore = 0;
+    private int highScoreEasy = 0;
+    private int highScoreMedium = 0;
+    private int highScoreHard = 0;
+    private int highScoreImpossible = 0;
+    private int highScoreCooked = 0;
+    private int highScoreJustWhy = 0;
     private int coins = 0;
     private Image backgroundImg;
 
@@ -57,7 +67,13 @@ class StartPanel extends JPanel {
         JButton shopButton = new JButton("        Shop        ");
         
         JComboBox<String> difficultyDrop = new JComboBox<>(difficulties);
-        JLabel highScoreLabel = new JLabel();
+        JLabel highScoreLabelEasy = new JLabel();
+        JLabel highScoreLabelMedium = new JLabel();
+        JLabel highScoreLabelHard = new JLabel();
+        JLabel highScoreLabelImpossible = new JLabel();
+        JLabel highScoreLabelCooked = new JLabel();
+        JLabel highScoreLabelJustWhy = new JLabel();
+
         JLabel coinsLabel = new JLabel();
 
         
@@ -68,16 +84,37 @@ class StartPanel extends JPanel {
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         shopButton.setAlignmentX(Component.CENTER_ALIGNMENT);
        
-        highScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        highScoreLabel.setForeground(Color.BLACK);
+        highScoreLabelEasy.setAlignmentX(Component.CENTER_ALIGNMENT);
+        highScoreLabelEasy.setForeground(Color.BLACK);
+        highScoreLabelMedium.setAlignmentX(Component.CENTER_ALIGNMENT);
+        highScoreLabelMedium.setForeground(Color.BLACK);
+        highScoreLabelHard.setAlignmentX(Component.CENTER_ALIGNMENT);
+        highScoreLabelHard.setForeground(Color.BLACK);
+        highScoreLabelImpossible.setAlignmentX(Component.CENTER_ALIGNMENT);
+        highScoreLabelImpossible.setForeground(Color.BLACK);
+        highScoreLabelCooked.setAlignmentX(Component.CENTER_ALIGNMENT);
+        highScoreLabelCooked.setForeground(Color.BLACK);
+        highScoreLabelJustWhy.setAlignmentX(Component.CENTER_ALIGNMENT);
+        highScoreLabelJustWhy.setForeground(Color.BLACK);
 
         coinsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         coinsLabel.setForeground(Color.BLACK);
 
-        highScore = loadHighScore();
+        highScoreEasy = loadHighScoreEasy();
+        highScoreMedium = loadHighScoreMedium();
+        highScoreHard = loadHighScoreHard();
+        highScoreImpossible = loadHighScoreImpossible();
+        highScoreCooked = loadHighScoreCooked();
+        highScoreJustWhy = loadHighScoreJustWhy();
+       
         coins = loadCoins();
         
-        highScoreLabel.setText("High Score: " + highScore);
+        highScoreLabelEasy.setText("High Score Ez: " + highScoreEasy);
+        highScoreLabelMedium.setText("High Score Mid: " + highScoreMedium);
+        highScoreLabelHard.setText("High Score Hard: " + highScoreHard);
+        highScoreLabelImpossible.setText("High Score Impossible: " + highScoreImpossible);
+        highScoreLabelCooked.setText("High Score Cooked: " + highScoreCooked);
+        highScoreLabelJustWhy.setText("High Score Just Why: " + highScoreJustWhy);
         coinsLabel.setText("Coins: " + coins);
         
         startButton.addActionListener(e -> {
@@ -97,7 +134,17 @@ class StartPanel extends JPanel {
         add(Box.createVerticalGlue());
         add(title);
         add(Box.createRigidArea(new Dimension(0, 20)));
-        add(highScoreLabel);
+        add(highScoreLabelEasy);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(highScoreLabelMedium);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(highScoreLabelHard);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(highScoreLabelImpossible);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(highScoreLabelCooked);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(highScoreLabelJustWhy);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(coinsLabel);
         add(Box.createRigidArea(new Dimension(0, 20)));
@@ -119,8 +166,43 @@ class StartPanel extends JPanel {
         }
     }
 
-    private int loadHighScore() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCORE_FILE))) {
+    private int loadHighScoreEasy() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCOREEASY_FILE))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    public int loadHighScoreMedium() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCOREMEDIUM_FILE))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadHighScoreHard() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCOREHARD_FILE))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadHighScoreImpossible() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCOREIMPOSSIBLE_FILE))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadHighScoreCooked() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCORECOOKED_FILE))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
+    private int loadHighScoreJustWhy() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCOREJUSTWHY_FILE))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             return 0;
@@ -134,13 +216,49 @@ class StartPanel extends JPanel {
         }
     }
 
-    public static void saveHighScore(int score) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCORE_FILE))) {
+    public static void saveHighScoreEasy(int score) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCOREEASY_FILE))) {
             writer.write(String.valueOf(score));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    public static void saveHighScoreMedium(int score) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCOREMEDIUM_FILE))) {
+            writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void saveHighScoreHard(int score) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCOREHARD_FILE))) {
+            writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void saveHighScoreImpossible(int score) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCOREIMPOSSIBLE_FILE))) {
+            writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void saveHighScoreCooked(int score) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCORECOOKED_FILE))) {
+            writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void saveHighScoreJustWhy(int score) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCOREJUSTWHY_FILE))) {
+            writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void saveTotalCoins(int score, int difficulty) {
         int coinsToAdd = 0;
         switch (difficulty) {
