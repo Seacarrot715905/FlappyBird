@@ -93,6 +93,11 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             placePipeTimer = new Timer(60, e -> placePipes());
             placePipeTimer.start();
         }
+        if (difficulty.equals("Just Why")) {
+            velocityX = -150;
+            placePipeTimer = new Timer(20  , e -> placePipes());
+            placePipeTimer.start();
+        }
 
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setFocusable(true);

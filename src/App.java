@@ -51,7 +51,7 @@ class StartPanel extends JPanel {
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setForeground(Color.BLACK);
 
-        String[] difficulties = {"Easy", "Medium", "Hard", "Impossible", "Cooked"};
+        String[] difficulties = {"Easy", "Medium", "Hard", "Impossible", "Cooked", "Just Why"};
 
         JButton startButton = new JButton("       Start        ");
         JButton shopButton = new JButton("        Shop        ");
