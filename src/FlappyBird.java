@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.print.DocFlavor.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -11,7 +12,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.io.*;
-import java.net.URL;
 
 public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -73,8 +73,38 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     JFrame frame;
 
-    public FlappyBird(JFrame frame) {
+    public FlappyBird(JFrame frame, String difficulty) {
         this.frame = frame;
+        if (difficulty.equals("Easy")) {
+            velocityX = -6;
+            placePipeTimer = new Timer(1500, e -> placePipes());
+            placePipeTimer.start();
+        }
+        else if (difficulty.equals("Medium")) {
+            velocityX = -12;
+            placePipeTimer = new Timer(1500, e -> placePipes());
+            placePipeTimer.start();
+        }
+        if (difficulty.equals("Hard")) {
+            velocityX = -60;
+            placePipeTimer = new Timer(700, e -> placePipes());
+            placePipeTimer.start();
+        }
+        if (difficulty.equals("Impossible")) {
+            velocityX = -120;
+            placePipeTimer = new Timer(150, e -> placePipes());
+            placePipeTimer.start();
+        }
+        if (difficulty.equals("Cooked")) {
+            velocityX = -140;
+            placePipeTimer = new Timer(60, e -> placePipes());
+            placePipeTimer.start();
+        }
+        if (difficulty.equals("Just Why")) {
+            velocityX = -150;
+            placePipeTimer = new Timer(20  , e -> placePipes());
+            placePipeTimer.start();
+        }
 
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setFocusable(true);
@@ -87,16 +117,15 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
         bird = new Bird(birdImg);
         pipes = new ArrayList<>();
-
-        placePipeTimer = new Timer(1500, e -> placePipes());
-        placePipeTimer.start();
+        
+        
 
         gameLoop = new Timer(1000 / 60, this);
         gameLoop.start();
 
         try {
             // Load the sound file
-            URL soundURL = getClass().getResource("/Sounds/mcMusic.wav");
+            java.net.URL soundURL = getClass().getResource("/Sounds/mcMusic.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
@@ -181,6 +210,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             return 0;
         }
     }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -190,12 +220,13 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             placePipeTimer.stop();
             gameLoop.stop();
             StartPanel.saveHighScore((int) Math.max(score, loadCurrentHighScore()));
+            StartPanel.saveTotalCoins((int)(score),getDifficulty());
         }
     }
 
     private void playJumpSound() {
         try {
-            URL soundURL = getClass().getResource("/Sounds/jump.wav");
+            java.net.URL soundURL = getClass().getResource("/Sounds/jump.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
@@ -211,8 +242,13 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             velocityY = -9;
-            playJumpSound();
             if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
+                StartPanel.saveHighScore((int) Math.max(score, loadCurrentHighScore()));
+                if(gameOver  && score == 0){
+                    StartPanel.saveTotalCoins((int)(score-25), getDifficulty());
+                }else{
+                    StartPanel.saveTotalCoins((int)(score), getDifficulty());
+                }
                 bird.y = birdY;
                 velocityY = 0;
                 pipes.clear();
@@ -220,13 +256,31 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
                 score = 0;
                 gameLoop.start();
                 placePipeTimer.start();
-            }
+            
         }
 
         if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
             App.showStartScreen(frame);
         }
-    }    
+    }
+    public int getDifficulty() {
+        if (velocityX == -6) {
+            return 1; // Easy
+        }
+        if (velocityX == -12) {
+            return 2; // Medium
+        }
+        if (velocityX == -60) {
+            return 3; // Hard
+        }
+        if (velocityX == -120) {
+            return 4; // Impossible
+        }
+        if (velocityX == -140) {
+            return 5; // Cooked
+        }
+        return 0; // Default
+    }
 
     @Override public void keyTyped(KeyEvent e) {}
     @Override public void keyReleased(KeyEvent e) {}

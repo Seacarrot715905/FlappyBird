@@ -1,5 +1,3 @@
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -34,7 +32,9 @@ public class App {
 
 class StartPanel extends JPanel {
     private static final String HIGHSCORE_FILE = "highscore.txt";
+    private static final String COINS_FILE = "coins.txt";
     private int highScore = 0;
+    private int coins = 0;
     private Image backgroundImg;
 
     public StartPanel(JFrame frame) {
@@ -51,21 +51,39 @@ class StartPanel extends JPanel {
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setForeground(Color.BLACK);
 
-        JButton startButton = new JButton("Start");
-        JButton shopButton = new JButton("Shop");
-        JLabel highScoreLabel = new JLabel();
+        String[] difficulties = {"Easy", "Medium", "Hard", "Impossible", "Cooked", "Just Why"};
 
+        JButton startButton = new JButton("       Start        ");
+        JButton shopButton = new JButton("        Shop        ");
+        
+        JComboBox<String> difficultyDrop = new JComboBox<>(difficulties);
+        JLabel highScoreLabel = new JLabel();
+        JLabel coinsLabel = new JLabel();
+
+        
+        difficultyDrop.setPreferredSize(new Dimension(120, 25));
+        difficultyDrop.setMaximumSize(new Dimension(120, 900));
+        difficultyDrop.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         shopButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+       
         highScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         highScoreLabel.setForeground(Color.BLACK);
 
-        highScore = loadHighScore();
-        highScoreLabel.setText("High Score: " + highScore);
+        coinsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        coinsLabel.setForeground(Color.BLACK);
 
+        highScore = loadHighScore();
+        coins = loadCoins();
+        
+        highScoreLabel.setText("High Score: " + highScore);
+        coinsLabel.setText("Coins: " + coins);
+        
         startButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
-            FlappyBird flappyBird = new FlappyBird(frame);
+            String difficulty = (String) (difficultyDrop.getSelectedItem());
+            FlappyBird flappyBird = new FlappyBird(frame, difficulty);
             frame.add(flappyBird);
             frame.revalidate();
             frame.repaint();
@@ -74,16 +92,24 @@ class StartPanel extends JPanel {
 
         shopButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Shop is under construction!"));
 
+        difficultyDrop.setPreferredSize(new Dimension(0, 10));
+
         add(Box.createVerticalGlue());
         add(title);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(highScoreLabel);
         add(Box.createRigidArea(new Dimension(0, 20)));
+        add(coinsLabel);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(startButton);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(shopButton);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(difficultyDrop);
         add(Box.createVerticalGlue());
     }
+
+    
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -100,10 +126,54 @@ class StartPanel extends JPanel {
             return 0;
         }
     }
+    private int loadCoins() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(COINS_FILE))) {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException | NumberFormatException e) {
+            return 0;
+        }
+    }
 
     public static void saveHighScore(int score) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCORE_FILE))) {
             writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void saveTotalCoins(int score, int difficulty) {
+        int coinsToAdd = 0;
+        switch (difficulty) {
+            case 1: 
+                coinsToAdd = (int)(score * 1);
+                break;
+            case 2: 
+                coinsToAdd = (int)(score * 2); 
+                break;
+            case 3: 
+                coinsToAdd = (int)(score * 2.5); 
+                break;
+            case 4: 
+                coinsToAdd = (int)(score * 4); 
+                break;
+            case 5: 
+                coinsToAdd = (int)(score * 6); 
+                break;
+            default: coinsToAdd = score;
+        }
+        
+        int newTotal = 0;
+        
+        try {
+            newTotal = new StartPanel(null).loadCoins() + coinsToAdd;
+        } catch (Exception e) {
+            newTotal = coinsToAdd;
+        }
+        if(newTotal < 0) {
+            newTotal = 0;
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(COINS_FILE))) {
+            writer.write(String.valueOf(newTotal));
         } catch (IOException e) {
             e.printStackTrace();
         }
