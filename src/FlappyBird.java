@@ -2,8 +2,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.io.*;
+import java.net.URL;
 
 public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -85,6 +93,20 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
         gameLoop = new Timer(1000 / 60, this);
         gameLoop.start();
+
+        try {
+            // Load the sound file
+            URL soundURL = getClass().getResource("/Sounds/mcMusic.wav");
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            // FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            // gainControl.setValue(gainControl.getMaximum());
+            clip.start();
+            clip.loop(clip.LOOP_CONTINUOUSLY);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     void placePipes() {
@@ -171,10 +193,25 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    private void playJumpSound() {
+        try {
+            URL soundURL = getClass().getResource("/Sounds/jump.wav");
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-20.0f);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             velocityY = -9;
+            playJumpSound();
             if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
                 bird.y = birdY;
                 velocityY = 0;
@@ -189,7 +226,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
             App.showStartScreen(frame);
         }
-    }
+    }    
 
     @Override public void keyTyped(KeyEvent e) {}
     @Override public void keyReleased(KeyEvent e) {}
