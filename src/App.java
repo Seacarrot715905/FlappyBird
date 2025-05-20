@@ -20,6 +20,10 @@ public class App {
         frame.setVisible(true);
     }
 
+    
+    
+    
+
     public static void showStartScreen(JFrame frame) {
         frame.getContentPane().removeAll();
         StartPanel startPanel = new StartPanel(frame);
@@ -67,12 +71,8 @@ class StartPanel extends JPanel {
         JButton shopButton = new JButton("        Shop        ");
         
         JComboBox<String> difficultyDrop = new JComboBox<>(difficulties);
-        JLabel highScoreLabelEasy = new JLabel();
-        JLabel highScoreLabelMedium = new JLabel();
-        JLabel highScoreLabelHard = new JLabel();
-        JLabel highScoreLabelImpossible = new JLabel();
-        JLabel highScoreLabelCooked = new JLabel();
-        JLabel highScoreLabelJustWhy = new JLabel();
+        
+        JLabel highScoreLabel = new JLabel();
 
         JLabel coinsLabel = new JLabel();
 
@@ -84,18 +84,9 @@ class StartPanel extends JPanel {
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         shopButton.setAlignmentX(Component.CENTER_ALIGNMENT);
        
-        highScoreLabelEasy.setAlignmentX(Component.CENTER_ALIGNMENT);
-        highScoreLabelEasy.setForeground(Color.BLACK);
-        highScoreLabelMedium.setAlignmentX(Component.CENTER_ALIGNMENT);
-        highScoreLabelMedium.setForeground(Color.BLACK);
-        highScoreLabelHard.setAlignmentX(Component.CENTER_ALIGNMENT);
-        highScoreLabelHard.setForeground(Color.BLACK);
-        highScoreLabelImpossible.setAlignmentX(Component.CENTER_ALIGNMENT);
-        highScoreLabelImpossible.setForeground(Color.BLACK);
-        highScoreLabelCooked.setAlignmentX(Component.CENTER_ALIGNMENT);
-        highScoreLabelCooked.setForeground(Color.BLACK);
-        highScoreLabelJustWhy.setAlignmentX(Component.CENTER_ALIGNMENT);
-        highScoreLabelJustWhy.setForeground(Color.BLACK);
+        
+        highScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        highScoreLabel.setForeground(Color.BLACK);
 
         coinsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         coinsLabel.setForeground(Color.BLACK);
@@ -109,12 +100,31 @@ class StartPanel extends JPanel {
        
         coins = loadCoins();
         
-        highScoreLabelEasy.setText("High Score Ez: " + highScoreEasy);
-        highScoreLabelMedium.setText("High Score Mid: " + highScoreMedium);
-        highScoreLabelHard.setText("High Score Hard: " + highScoreHard);
-        highScoreLabelImpossible.setText("High Score Impossible: " + highScoreImpossible);
-        highScoreLabelCooked.setText("High Score Cooked: " + highScoreCooked);
-        highScoreLabelJustWhy.setText("High Score Just Why: " + highScoreJustWhy);
+
+        
+        
+        
+        // Periodically check and update the high score label based on difficulty selection
+        Timer timer = new Timer(20, e -> {
+            String difficulty = (String) (difficultyDrop.getSelectedItem());
+            if(difficulty == "Easy"){
+                highScoreLabel.setText("High Score " + difficulty + " : " + highScoreEasy);
+            } else if(difficulty == "Medium"){
+                highScoreLabel.setText("High Score " + difficulty + " : " + highScoreMedium);
+            } else if(difficulty == "Hard"){
+                highScoreLabel.setText("High Score " + difficulty + " : " + highScoreHard);
+            } else if(difficulty == "Impossible"){
+                highScoreLabel.setText("High Score " + difficulty + " : " + highScoreImpossible);
+            } else if(difficulty == "Cooked"){
+                highScoreLabel.setText("High Score " + difficulty + " : " + highScoreCooked);
+            } else if(difficulty == "Just Why"){
+                highScoreLabel.setText("High Score " + difficulty + " : " + highScoreJustWhy);
+            }
+            
+        });
+        timer.start();
+        
+        
         coinsLabel.setText("Coins: " + coins);
         
         startButton.addActionListener(e -> {
@@ -134,17 +144,9 @@ class StartPanel extends JPanel {
         add(Box.createVerticalGlue());
         add(title);
         add(Box.createRigidArea(new Dimension(0, 20)));
-        add(highScoreLabelEasy);
+        //
         add(Box.createRigidArea(new Dimension(0, 20)));
-        add(highScoreLabelMedium);
-        add(Box.createRigidArea(new Dimension(0, 20)));
-        add(highScoreLabelHard);
-        add(Box.createRigidArea(new Dimension(0, 20)));
-        add(highScoreLabelImpossible);
-        add(Box.createRigidArea(new Dimension(0, 20)));
-        add(highScoreLabelCooked);
-        add(Box.createRigidArea(new Dimension(0, 20)));
-        add(highScoreLabelJustWhy);
+        add(highScoreLabel);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(coinsLabel);
         add(Box.createRigidArea(new Dimension(0, 20)));

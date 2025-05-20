@@ -68,6 +68,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     Timer placePipeTimer;
     boolean gameOver = false;
     double score = 0;
+    int difficulty = 1;
 
     JFrame frame;
 
@@ -78,31 +79,37 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             velocityX = -6;
             placePipeTimer = new Timer(1500, e -> placePipes());
             placePipeTimer.start();
+            this.difficulty = 1;
         }
         else if (difficulty.equals("Medium")) {
             velocityX = -12;
             placePipeTimer = new Timer(1500, e -> placePipes());
             placePipeTimer.start();
+            this.difficulty = 2;
         }
         if (difficulty.equals("Hard")) {
             velocityX = -60;
             placePipeTimer = new Timer(700, e -> placePipes());
             placePipeTimer.start();
+            this.difficulty = 3;
         }
         if (difficulty.equals("Impossible")) {
             velocityX = -120;
             placePipeTimer = new Timer(150, e -> placePipes());
             placePipeTimer.start();
+            this.difficulty = 4;
         }
         if (difficulty.equals("Cooked")) {
             velocityX = -140;
             placePipeTimer = new Timer(60, e -> placePipes());
             placePipeTimer.start();
+            this.difficulty = 5;
         }
         if (difficulty.equals("Just Why")) {
             velocityX = -150;
             placePipeTimer = new Timer(20  , e -> placePipes());
             placePipeTimer.start();
+            this.difficulty = 6;
         }
 
         setPreferredSize(new Dimension(boardWidth, boardHeight));
@@ -131,7 +138,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             // FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             // gainControl.setValue(gainControl.getMaximum());
             clip.start();
-            clip.loop(clip.LOOP_CONTINUOUSLY);
+            clip.loop(-1);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
@@ -202,42 +209,42 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
                a.y + a.height > b.y;
     }
 
-    private int loadCurrentHighScoreEasy() {
+    private static int loadCurrentHighScoreEasy() {
         try (BufferedReader reader = new BufferedReader(new FileReader("highscoreEasy.txt"))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             return 0;
         }
     }
-    private int loadCurrentHighScoreMedium() {
+    private static int loadCurrentHighScoreMedium() {
         try (BufferedReader reader = new BufferedReader(new FileReader("highscoreMedium.txt"))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             return 0;
         }
     }
-    private int loadCurrentHighScoreHard() {
+    private static int loadCurrentHighScoreHard() {
         try (BufferedReader reader = new BufferedReader(new FileReader("highscoreHard.txt"))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             return 0;
         }
     }
-    private int loadCurrentHighScoreImpossible() {
+    private static int loadCurrentHighScoreImpossible() {
         try (BufferedReader reader = new BufferedReader(new FileReader("highscoreImpossible.txt"))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             return 0;
         }
     }
-    private int loadCurrentHighScoreCooked() {
+    private static int loadCurrentHighScoreCooked() {
         try (BufferedReader reader = new BufferedReader(new FileReader("highscoreCooked.txt"))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             return 0;
         }
     }
-    private int loadCurrentHighScoreJustWhy() {
+    private static int loadCurrentHighScoreJustWhy() {
         try (BufferedReader reader = new BufferedReader(new FileReader("highscoreJustWhy.txt"))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
@@ -306,25 +313,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         }
     }
     public int getDifficulty() {
-        if (diff.equals("Easy")) {
-            return 1; // Easy
-        }
-        if (diff.equals("Medium")) {
-            return 2; // Medium
-        }
-        if (diff.equals("Hard")) {
-            return 3; // Hard
-        }
-        if (diff.equals("Impossible")) {
-            return 4; // Impossible
-        }
-        if (diff.equals("Cooked")) {
-            return 5; // Cooked
-        }
-        if (diff.equals("Just Why")) {
-            return 6;
-        }
-        return 0; // Default
+        return difficulty; // Default
     }
 
     @Override public void keyTyped(KeyEvent e) {}
