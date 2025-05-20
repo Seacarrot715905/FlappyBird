@@ -60,7 +60,7 @@ class StartPanel extends JPanel {
             System.out.println("Background image not found.");
         }
 
-        JLabel title = new JLabel("Flappy Bird");
+        JLabel title = new JLabel("Shitty Bird");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setForeground(Color.BLACK);
@@ -279,6 +279,8 @@ class StartPanel extends JPanel {
             case 5: 
                 coinsToAdd = (int)(score * 6); 
                 break;
+            case 6: // Just Why
+                coinsToAdd = (int) (score * 10);
             default: coinsToAdd = score;
         }
         
