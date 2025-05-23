@@ -60,7 +60,7 @@ class StartPanel extends JPanel {
             System.out.println("Background image not found.");
         }
 
-        JLabel title = new JLabel("Shitty Bird");
+        JLabel title = new JLabel("Flappy Bird");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setForeground(Color.BLACK);
@@ -105,7 +105,7 @@ class StartPanel extends JPanel {
         
         
         // Periodically check and update the high score label based on difficulty selection
-        Timer timer = new Timer(20, e -> {
+        Timer timer = new Timer(200, e -> {
             String difficulty = (String) (difficultyDrop.getSelectedItem());
             if(difficulty == "Easy"){
                 highScoreLabel.setText("High Score " + difficulty + " : " + highScoreEasy);
@@ -122,6 +122,7 @@ class StartPanel extends JPanel {
             }
             
         });
+        
         timer.start();
         
         
@@ -144,8 +145,6 @@ class StartPanel extends JPanel {
         add(Box.createVerticalGlue());
         add(title);
         add(Box.createRigidArea(new Dimension(0, 20)));
-        //
-        add(Box.createRigidArea(new Dimension(0, 20)));
         add(highScoreLabel);
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(coinsLabel);
@@ -156,6 +155,7 @@ class StartPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(difficultyDrop);
         add(Box.createVerticalGlue());
+        timer.restart();
     }
 
     
