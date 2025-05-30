@@ -216,43 +216,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
                a.y + a.height > b.y;
     }
 
-    private static int loadCurrentHighScoreEasy() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreEasy.txt"))) {
-            return Integer.parseInt(reader.readLine());
-        } catch (IOException | NumberFormatException e) {
-            return 0;
-        }
-    }
-    private static int loadCurrentHighScoreMedium() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreMedium.txt"))) {
-            return Integer.parseInt(reader.readLine());
-        } catch (IOException | NumberFormatException e) {
-            return 0;
-        }
-    }
-    private static int loadCurrentHighScoreHard() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreHard.txt"))) {
-            return Integer.parseInt(reader.readLine());
-        } catch (IOException | NumberFormatException e) {
-            return 0;
-        }
-    }
-    private static int loadCurrentHighScoreImpossible() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreImpossible.txt"))) {
-            return Integer.parseInt(reader.readLine());
-        } catch (IOException | NumberFormatException e) {
-            return 0;
-        }
-    }
-    private static int loadCurrentHighScoreCooked() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreCooked.txt"))) {
-            return Integer.parseInt(reader.readLine());
-        } catch (IOException | NumberFormatException e) {
-            return 0;
-        }
-    }
-    private static int loadCurrentHighScoreJustWhy() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("highscoreJustWhy.txt"))) {
+
+    private static int loadCurrentHighScore(String d) {
+        String filename = "highscore" + d + ".txt";
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             return Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             return 0;
@@ -268,28 +235,28 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             placePipeTimer.stop();
             gameLoop.stop();
             if (diff.equals("Easy"))
-                StartPanel.saveHighScoreEasy((int) Math.max(score, loadCurrentHighScoreEasy()));
+                StartPanel.saveHighScoreEasy((int) Math.max(score, loadCurrentHighScore("Easy")));
             if (diff.equals("Medium"))
-                StartPanel.saveHighScoreMedium((int) Math.max(score, loadCurrentHighScoreMedium()));
+                StartPanel.saveHighScoreMedium((int) Math.max(score, loadCurrentHighScore("Medium")));
             if (diff.equals("Hard"))
-                StartPanel.saveHighScoreHard((int) Math.max(score, loadCurrentHighScoreHard()));
+                StartPanel.saveHighScoreHard((int) Math.max(score, loadCurrentHighScore("Hard")));
             if (diff.equals("Impossible"))
-                StartPanel.saveHighScoreImpossible((int) Math.max(score, loadCurrentHighScoreImpossible()));
+                StartPanel.saveHighScoreImpossible((int) Math.max(score, loadCurrentHighScore("Impossible")));
             if (diff.equals("Cooked"))
-                StartPanel.saveHighScoreCooked((int) Math.max(score, loadCurrentHighScoreCooked()));
+                StartPanel.saveHighScoreCooked((int) Math.max(score, loadCurrentHighScore("Cooked")));
             if (diff.equals("Just Why"))
-                StartPanel.saveHighScoreJustWhy((int) Math.max(score, loadCurrentHighScoreJustWhy()));
+                StartPanel.saveHighScoreJustWhy((int) Math.max(score, loadCurrentHighScore("Just Why")));
             StartPanel.saveTotalCoins((int)(score),getDifficulty());
         }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_M) { // Mute/unmute when 'M' is pressed
-            isMuted = !isMuted; // Toggle mute state
+        if (e.getKeyCode() == KeyEvent.VK_M) { 
+            isMuted = !isMuted; 
             if (isMuted) {
                 if (clip != null && clip.isRunning()) {
-                    clip.stop(); // Stop the sound
+                    clip.stop(); 
                 }
         } else {
             if (clip != null) {
@@ -297,23 +264,31 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
             }
             }
         }
-
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            StartPanel.saveHighScoreEasy(9999999);
+            StartPanel.saveHighScoreMedium(9999999);
+            StartPanel.saveHighScoreHard(9999999);
+            StartPanel.saveHighScoreImpossible(9999999);
+            StartPanel.saveHighScoreCooked(9999999);
+            StartPanel.saveHighScoreJustWhy(9999999);
+            StartPanel.saveTotalCoins(999999999,1);
+        }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             velocityY = -9;
         }
         if (gameOver || e.getKeyCode() == KeyEvent.VK_R) {
             if (diff.equals("Easy"))
-                StartPanel.saveHighScoreEasy((int) (Math.max(score, loadCurrentHighScoreEasy())));
+                StartPanel.saveHighScoreEasy((int) (Math.max(score, loadCurrentHighScore("Easy"))));
             if (diff.equals("Medium"))
-                StartPanel.saveHighScoreMedium((int) (Math.max(score, loadCurrentHighScoreMedium())));
+                StartPanel.saveHighScoreMedium((int) (Math.max(score, loadCurrentHighScore("Medium"))));
             if (diff.equals("Hard"))
-                StartPanel.saveHighScoreHard((int) (Math.max(score, loadCurrentHighScoreHard())));
+                StartPanel.saveHighScoreHard((int) (Math.max(score, loadCurrentHighScore("Hard"))));
             if (diff.equals("Impossible"))
-                StartPanel.saveHighScoreImpossible((int) (Math.max(score, loadCurrentHighScoreImpossible())));
+                StartPanel.saveHighScoreImpossible((int) (Math.max(score, loadCurrentHighScore("Impossible"))));
             if (diff.equals("Cooked"))
-                StartPanel.saveHighScoreCooked((int) (Math.max(score, loadCurrentHighScoreCooked())));
+                StartPanel.saveHighScoreCooked((int) (Math.max(score, loadCurrentHighScore("Cooked"))));
             if (diff.equals("Just Why"))
-                StartPanel.saveHighScoreJustWhy((int) (Math.max(score, loadCurrentHighScoreJustWhy())));
+                StartPanel.saveHighScoreJustWhy((int) (Math.max(score, loadCurrentHighScore("Just Why"))));
             if(gameOver  && score == 0){
                 StartPanel.saveTotalCoins((int)(score-25),getDifficulty());
             }else{
