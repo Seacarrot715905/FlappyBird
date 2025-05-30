@@ -98,7 +98,7 @@ class StartPanel extends JPanel {
         coins = loadCoins();
     
         // Periodically check and update the high score label based on difficulty selection
-        Timer timer = new Timer(200, e -> {
+        Timer timer = new Timer(500, e -> {
             String difficulty = (String) (difficultyDrop.getSelectedItem());
             if(difficulty == "Easy"){
                 highScoreLabel.setText("High Score " + difficulty + " : " + highScoreEasy);

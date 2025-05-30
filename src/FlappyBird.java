@@ -22,8 +22,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     int birdX = boardWidth / 8;
     int birdY = boardHeight / 2;
-    int birdWidth = (int) (34.0 * 1.5);
-    int birdHeight = (int) (24.0 * 1.5);
+    int birdWidth = (int) (34.0 * 1.25);
+    int birdHeight = (int) (24.0 * 1.25);
 
     class Bird {
         int x = birdX;
@@ -40,7 +40,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     int pipeX = boardWidth;
     int pipeY = 0;
     int pipeWidth = 64;
-    int pipeHeight = 512; //512
+    int pipeHeight = 700; //512
 
     class Pipe {
         int x = pipeX;
@@ -71,7 +71,9 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     int difficulty = 1;
 
     JFrame frame;
+
     Clip clip;
+    boolean isMuted = false;
 
     public FlappyBird(JFrame frame, String difficulty) {
         this.frame = frame;
@@ -283,6 +285,19 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_M) { // Mute/unmute when 'M' is pressed
+            isMuted = !isMuted; // Toggle mute state
+            if (isMuted) {
+                if (clip != null && clip.isRunning()) {
+                    clip.stop(); // Stop the sound
+                }
+        } else {
+            if (clip != null) {
+                clip.loop(Clip.LOOP_CONTINUOUSLY); // Resume the sound
+            }
+            }
+        }
+
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             velocityY = -9;
         }
