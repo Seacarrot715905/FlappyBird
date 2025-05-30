@@ -20,9 +20,6 @@ public class App {
         frame.setVisible(true);
     }
 
-    
-    
-    
 
     public static void showStartScreen(JFrame frame) {
         frame.getContentPane().removeAll();
@@ -99,11 +96,7 @@ class StartPanel extends JPanel {
         highScoreJustWhy = loadHighScoreJustWhy();
        
         coins = loadCoins();
-        
-
-        
-        
-        
+    
         // Periodically check and update the high score label based on difficulty selection
         Timer timer = new Timer(200, e -> {
             String difficulty = (String) (difficultyDrop.getSelectedItem());

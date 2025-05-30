@@ -22,8 +22,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     int birdX = boardWidth / 8;
     int birdY = boardHeight / 2;
-    int birdWidth = 34;
-    int birdHeight = 24;
+    int birdWidth = (int) (34.0 * 1.5);
+    int birdHeight = (int) (24.0 * 1.5);
 
     class Bird {
         int x = birdX;
@@ -40,7 +40,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     int pipeX = boardWidth;
     int pipeY = 0;
     int pipeWidth = 64;
-    int pipeHeight = 512;
+    int pipeHeight = 512; //512
 
     class Pipe {
         int x = pipeX;
@@ -71,6 +71,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     int difficulty = 1;
 
     JFrame frame;
+    Clip clip;
 
     public FlappyBird(JFrame frame, String difficulty) {
         this.frame = frame;
@@ -123,20 +124,24 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
         bird = new Bird(birdImg);
         pipes = new ArrayList<>();
-        
-        
 
         gameLoop = new Timer(1000 / 60, this);
         gameLoop.start();
 
         try {
-            // Load the sound file
-            java.net.URL soundURL = getClass().getResource("/Sounds/mcMusic.wav");
+          
+            if (clip != null && clip.isRunning()) {
+                clip.stop(); // Stop the previous clip if it's running
+            }
+            if (clip != null) {
+                clip.close(); // Close the previous clip to release resources
+            }
+
+            java.net.URL soundURL = getClass().getResource("/Sounds/bgMusic.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
-            Clip clip = AudioSystem.getClip();
+           
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-            // FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            // gainControl.setValue(gainControl.getMaximum());
             clip.start();
             clip.loop(-1);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
@@ -313,7 +318,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         }
     }
     public int getDifficulty() {
-        return difficulty; // Default
+        return difficulty;
     }
 
     @Override public void keyTyped(KeyEvent e) {}
